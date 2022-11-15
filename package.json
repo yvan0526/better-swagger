@@ -3,7 +3,7 @@
   "displayName": "Swaggeright",
   "version": "0.0.0",
   "description": "A basic Plasmo extension.",
-  "author": "a.basri",
+  "author": "horhorou",
   "scripts": {
     "dev": "plasmo dev",
     "build": "plasmo build"
@@ -17,17 +17,26 @@
     "react-dom": "18.2.0"
   },
   "devDependencies": {
+    "@jest/globals": "^29.3.1",
+    "@jest/types": "^29.3.1",
     "@plasmohq/prettier-plugin-sort-imports": "3.5.2",
+    "@testing-library/react": "^13.4.0",
     "@types/chrome": "0.0.197",
     "@types/node": "18.8.3",
     "@types/react": "18.0.21",
     "@types/react-dom": "18.0.6",
+    "jest": "^29.3.1",
+    "jest-environment-jsdom": "^29.3.1",
     "prettier": "2.7.1",
+    "ts-jest": "^29.0.3",
     "typescript": "4.8.4"
   },
   "manifest": {
     "host_permissions": [
       "https://*/*"
+    ],
+    "permissions": [
+      "tabs"
     ]
   }
 }
