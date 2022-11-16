@@ -11,5 +11,6 @@ export type Tab = {
 
 export enum ActionsOptions {
   EXPAND_ALL = "expandAll",
-  COMPACT_ALL = "compactAll"
+  COMPACT_ALL = "compactAll",
+  CHECK_SWAGGER = "checkSwagger"
 }

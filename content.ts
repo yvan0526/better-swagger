@@ -1,4 +1,4 @@
-import type { ActionsOptions } from "~types"
+import { ActionsOptions } from "~types"
 
 const expandAll = () => {
   const allButtons = document.querySelectorAll(
@@ -25,15 +25,31 @@ const compactAll = () => {
   })
 }
 
-const ACTIONS: Record<ActionsOptions, () => void> = {
-  expandAll,
-  compactAll
+const checkSwagger = () => {
+  const swaggerElement = document.getElementById("swagger-ui")
+  console.log({
+    swaggerElement
+  })
+  return !!swaggerElement
 }
 
-chrome.runtime.onMessage.addListener((message: { action: ActionsOptions }) => {
-  if (message.action in ACTIONS) {
-    ACTIONS[message.action]()
+
+
+chrome.runtime.onMessage.addListener((message: { action: ActionsOptions }, _, sendResponse) => {
+
+  switch (message.action) {
+    case ActionsOptions.EXPAND_ALL:
+      expandAll();
+      break
+    case ActionsOptions.COMPACT_ALL:
+      compactAll();
+      break
+    case ActionsOptions.CHECK_SWAGGER:
+      const isSwagger = checkSwagger()
+      sendResponse(isSwagger)
+      break
   }
+
 })
 
-export {}
+export { }
