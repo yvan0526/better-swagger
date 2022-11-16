@@ -8,3 +8,8 @@ export type Tab = {
   label: string
   value: TabsOptions
 }
+
+export enum ActionsOptions {
+  EXPAND_ALL = "expandAll",
+  COMPACT_ALL = "compactAll"
+}
