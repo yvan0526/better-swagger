@@ -14,13 +14,17 @@ const TabViewer = ({ currentTab }: TabViewerProps) => {
 
   if (currentTab === "auth") {
     return (
-      <div>
+      <div data-testid="authContainer">
         <h1>Auth</h1>
       </div>
     )
   }
 
-  return <></>
+  return (
+    <div>
+      <h1>About</h1>
+    </div>
+  )
 }
 
 export default TabViewer

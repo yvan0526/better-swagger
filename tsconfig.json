@@ -2,6 +2,7 @@
   "extends": "plasmo/templates/tsconfig.base",
   "exclude": ["node_modules"],
   "include": [".plasmo/**/*", "./**/*.ts", "./**/*.tsx"],
+  "types": ["jest", "@jest/globals", "@testing-library/jest-dom"],
   "compilerOptions": {
     "paths": {
       "~*": ["./*"]

@@ -2,10 +2,8 @@ import {
   Box,
   Button,
   Divider,
-  Grid,
   Group,
   MantineProvider,
-  SegmentedControl,
   Space,
   Stack,
   Text,
@@ -20,6 +18,7 @@ import { NAVIGATION_TABS } from "~utils"
 
 function IndexPopup() {
   const [currentTab, setTab] = useState<TabsOptions>(TabsOptions.TOOLS)
+
   const { classes } = useStyles()
 
   return (
@@ -35,11 +34,19 @@ function IndexPopup() {
           </Text>
           <Divider my="sm" />
         </Stack>
-        <SegmentedControl
-          onChange={(v) => setTab(v as TabsOptions)}
-          value={currentTab}
-          data={NAVIGATION_TABS}
-        />
+        <Group spacing="lg">
+          {NAVIGATION_TABS.map((tab) => (
+            <Button
+              key={tab.value}
+              onClick={() => setTab(tab.value)}
+              color="dark"
+              variant={currentTab === tab.value ? "filled" : "default"}
+              name={tab.value}>
+              {tab.label}
+            </Button>
+          ))}
+        </Group>
+
         <Space h="lg" />
         <TabViewer currentTab={currentTab} />
       </Box>
