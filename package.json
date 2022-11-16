@@ -1,8 +1,8 @@
 {
-  "name": "swaggeright",
-  "displayName": "Swaggeright",
+  "name": "better-swagger",
+  "displayName": "Better Swagger",
   "version": "0.0.0",
-  "description": "A basic Plasmo extension.",
+  "description": "A chrome extension to help you search and navigate SwaggerUI docs",
   "author": "horhorou",
   "scripts": {
     "dev": "plasmo dev",
