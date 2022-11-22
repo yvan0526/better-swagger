@@ -114,8 +114,6 @@ const TabViewer = ({ currentTab, browserTab }: TabViewerProps) => {
     setStateStore(newStore)
   }
 
-  const store = JSON.parse(localStorage.getItem("store")) as ExtensionStore
-
   switch (currentTab) {
     case TabsOptions.TOOLS:
       return (
@@ -151,15 +149,20 @@ const TabViewer = ({ currentTab, browserTab }: TabViewerProps) => {
       )
 
     case TabsOptions.PROFILES: {
+      const store = JSON.parse(localStorage.getItem("store")) as ExtensionStore
+      const domainUrl = browserTab.url.replace("/index.html", '')
+      const domain = store[domainUrl]
+
+      if (!domain){
+        return
+      }
+
       return (
         <div data-testid="authContainer">
           <Stack>
             {
-              Object.entries(store ?? []).map(([key, value]) => {
-
-                const { profiles } = value // Destructurer un objet => value.profiles
-
-                return profiles.map((profile) => (
+              domain.profiles.map((profile) => {
+                return (
                   <Card key={profile.id} shadow="sm" p="lg" radius="lg">
                     <Group position="apart">
                       <Text size="sm" color="green">{profile.name}</Text>
@@ -171,7 +174,7 @@ const TabViewer = ({ currentTab, browserTab }: TabViewerProps) => {
                       </Button>
                     </Group>
                   </Card>
-                ))
+                )
               })
             }
           </Stack>
