@@ -31,13 +31,17 @@ const checkSwagger = () => {
 }
 
 const signIn = (token: string) => {
-  alert(token)
   const authBtn = document.querySelector("#swagger-ui > section > div.swagger-ui > div:nth-child(2) > div.scheme-container > section > div.auth-wrapper > button") as HTMLButtonElement
   authBtn.click()
+
+  const tokenInput = document.querySelector('#swagger-ui > section > div.swagger-ui > div:nth-child(2) > div.scheme-container > section > div.auth-wrapper > div > div.modal-ux > div > div > div.modal-ux-content > div > form > div:nth-child(1) > div:nth-child(3) > section > input[type=text]') as HTMLInputElement
+  tokenInput.value = token
+
+  const sendTokenBtn = document.querySelector('#swagger-ui > section > div.swagger-ui > div:nth-child(2) > div.scheme-container > section > div.auth-wrapper > div > div.modal-ux > div > div > div.modal-ux-content > div > form > div.auth-btn-wrapper > button.btn.modal-btn.auth.authorize.button') as HTMLButtonElement
+  sendTokenBtn.click()
 }
 
 chrome.runtime.onMessage.addListener((message: { action: ActionsOptions, payload?: any }, _, sendResponse) => {
-
   switch (message.action) {
     case ActionsOptions.EXPAND_ALL:
       expandAll();
@@ -53,7 +57,6 @@ chrome.runtime.onMessage.addListener((message: { action: ActionsOptions, payload
       signIn(message.payload as string)
       break
   }
-
 })
 
 export { }
