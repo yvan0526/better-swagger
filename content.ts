@@ -27,15 +27,16 @@ const compactAll = () => {
 
 const checkSwagger = () => {
   const swaggerElement = document.getElementById("swagger-ui")
-  console.log({
-    swaggerElement
-  })
   return !!swaggerElement
 }
 
+const signIn = (token: string) => {
+  alert(token)
+  const authBtn = document.querySelector("#swagger-ui > section > div.swagger-ui > div:nth-child(2) > div.scheme-container > section > div.auth-wrapper > button") as HTMLButtonElement
+  authBtn.click()
+}
 
-
-chrome.runtime.onMessage.addListener((message: { action: ActionsOptions }, _, sendResponse) => {
+chrome.runtime.onMessage.addListener((message: { action: ActionsOptions, payload?: any }, _, sendResponse) => {
 
   switch (message.action) {
     case ActionsOptions.EXPAND_ALL:
@@ -47,6 +48,9 @@ chrome.runtime.onMessage.addListener((message: { action: ActionsOptions }, _, se
     case ActionsOptions.CHECK_SWAGGER:
       const isSwagger = checkSwagger()
       sendResponse(isSwagger)
+      break
+    case ActionsOptions.SIGN_IN:
+      signIn(message.payload as string)
       break
   }
 

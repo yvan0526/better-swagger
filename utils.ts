@@ -6,6 +6,10 @@ export const NAVIGATION_TABS: Tab[] = [
     value: TabsOptions.TOOLS
   },
   {
+    label: "Profiles",
+    value: TabsOptions.PROFILES
+  },
+  {
     label: "Auth",
     value: TabsOptions.AUTH
   },

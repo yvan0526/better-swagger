@@ -13,36 +13,50 @@ import { useEffect, useState } from "react"
 
 import TabViewer from "~components/TabViewer/TabViewer"
 import { useStyles } from "~styles/global.styles"
-import { ActionsOptions, TabsOptions } from "~types"
+import { ActionsOptions, ExtensionStore, TabsOptions } from "~types"
 import { NAVIGATION_TABS } from "~utils"
 
 function IndexPopup() {
+  const [browserTab, setBrowserTab] = useState<chrome.tabs.Tab>()
   const [currentTab, setTab] = useState<TabsOptions>(TabsOptions.TOOLS)
   const [isTabSwagger, setTabSwagger] = useState(false)
   const { classes } = useStyles()
 
-
-  // React hook => Fonction intégré à React qui exécute un bloc d'instructions logique
-
+  // React hook => Fonction intégrée à React qui exécute un bloc d'instructions logique une fois
   useEffect(() => {
     const startExtension = async () => {
-      const [browserTab] = await chrome.tabs.query({ active: true, currentWindow: true })
-      const message = {
+      const [currentBrowserTab] = await chrome.tabs.query({ active: true, currentWindow: true })
+      setBrowserTab(currentBrowserTab)
+
+      let message = {
         action: ActionsOptions.CHECK_SWAGGER
       }
-      const isBrowserTabSwagger = await chrome.tabs.sendMessage(browserTab.id, message) as boolean
+      const isBrowserTabSwagger = await chrome.tabs.sendMessage(currentBrowserTab.id, message) as boolean
       setTabSwagger(isBrowserTabSwagger)
+
+      const store = JSON.parse(localStorage.getItem("store")) as ExtensionStore ?? {}
+      const domainUrl = currentBrowserTab.url.replace("/index.html", '')
+
+      if (!!store[domainUrl]) {
+        store[domainUrl] = {
+          profiles: [...store[domainUrl].profiles]
+        }
+      } else {
+        store[domainUrl] = {
+          profiles: []
+        }
+      }
+
+      if (isBrowserTabSwagger) {
+        localStorage.setItem("store", JSON.stringify(store ?? []))
+      }
     }
 
     startExtension()
-
   }, [])
-
-
 
   return (
     <MantineProvider withGlobalStyles withNormalizeCSS>
-
       {
         !isTabSwagger && (
           <Box className={classes.popupContainer}>
@@ -63,7 +77,6 @@ function IndexPopup() {
           </Box>
         )
       }
-
 
       {
         isTabSwagger && (
@@ -92,7 +105,7 @@ function IndexPopup() {
             </Group>
 
             <Space h="lg" />
-            <TabViewer currentTab={currentTab} />
+            <TabViewer currentTab={currentTab} browserTab={browserTab} />
           </Box>
         )
       }
