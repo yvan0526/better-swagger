@@ -63,23 +63,23 @@ const TabViewer = ({ currentTab, browserTab }: TabViewerProps) => {
 
   const onProfileUse = async (profile: Profile) => {
     // Recuperation du token
-    let data = undefined
+    let response = undefined
     await axios.post(profile.authRoute, {
       email: profile.email,
       password: profile.password
     })
-      .then((response) => {
-        data = response
+      .then((success) => {
+        response = success
       })
       .catch((error) => {
         alert(`Error while connecting as ${profile.name} : ${error}`)
       })
 
-    if (data === undefined) {
+    if (response === undefined) {
       return
     }
 
-    const { access_token } = data as AuthResponseDto
+    const { access_token } = response.data as AuthResponseDto
 
     if (access_token === undefined) {
       return
@@ -93,7 +93,7 @@ const TabViewer = ({ currentTab, browserTab }: TabViewerProps) => {
 
     chrome.tabs.sendMessage(currentTab.id, {
       action: ActionsOptions.SIGN_IN,
-      token: access_token
+      payload: access_token
     })
   }
 
@@ -153,7 +153,7 @@ const TabViewer = ({ currentTab, browserTab }: TabViewerProps) => {
       const domainUrl = browserTab.url.replace("/index.html", '')
       const domain = store[domainUrl]
 
-      if (!domain){
+      if (!domain) {
         return
       }
 
