@@ -1,11 +1,13 @@
 import { Button, Card, Divider, Group, PasswordInput, Space, Stack, Text, TextInput } from "@mantine/core"
 import { useForm } from "react-hook-form"
+import { useState } from "react"
 
 import _ from 'lodash'
 import { ActionsOptions, AuthResponseDto, ExtensionStore, Profile, TabsOptions } from "~types"
 
 import type { TabViewerProps } from "./TabViewer.types"
 import axios from "axios"
+import { useSetState } from "@mantine/hooks"
 
 const TabViewer = ({ currentTab, browserTab }: TabViewerProps) => {
   const form = useForm<Profile>({
@@ -95,6 +97,7 @@ const TabViewer = ({ currentTab, browserTab }: TabViewerProps) => {
     })
   }
 
+  const [stateStore, setStateStore] = useState(JSON.parse(localStorage.getItem("store")) as ExtensionStore)
   const onProfileDeletion = async (profileToDelete: Profile) => {
     const oldStore = JSON.parse(localStorage.getItem("store")) as ExtensionStore
     const domainUrl = browserTab.url.replace("/index.html", '')
@@ -108,8 +111,7 @@ const TabViewer = ({ currentTab, browserTab }: TabViewerProps) => {
     }
 
     localStorage.setItem("store", JSON.stringify(newStore))
-
-    window.location.reload()
+    setStateStore(newStore)
   }
 
   const store = JSON.parse(localStorage.getItem("store")) as ExtensionStore
