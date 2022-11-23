@@ -18,3 +18,5 @@ export const NAVIGATION_TABS: Tab[] = [
     value: TabsOptions.ABOUT
   }
 ]
+
+export const wait = (ms: number) => new Promise((res) => setTimeout(res, ms))

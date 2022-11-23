@@ -1,4 +1,5 @@
 import { ActionsOptions } from "~types"
+import { wait } from "~utils"
 
 const expandAll = () => {
   const allButtons = document.querySelectorAll(
@@ -30,15 +31,30 @@ const checkSwagger = () => {
   return !!swaggerElement
 }
 
-const signIn = (token: string) => {
+
+
+const signIn = async (token: string) => {
   const authBtn = document.querySelector("#swagger-ui > section > div.swagger-ui > div:nth-child(2) > div.scheme-container > section > div.auth-wrapper > button") as HTMLButtonElement
   authBtn.click()
 
-  const tokenInput = document.querySelector('#swagger-ui > section > div.swagger-ui > div:nth-child(2) > div.scheme-container > section > div.auth-wrapper > div > div.modal-ux > div > div > div.modal-ux-content > div > form > div:nth-child(1) > div:nth-child(3) > section > input[type=text]') as HTMLInputElement
-  tokenInput.value = token
+  try {
+    const tokenInput = document.querySelector('[aria-label="auth-bearer-value"]') as HTMLInputElement
 
-  const sendTokenBtn = document.querySelector('#swagger-ui > section > div.swagger-ui > div:nth-child(2) > div.scheme-container > section > div.auth-wrapper > div > div.modal-ux > div > div > div.modal-ux-content > div > form > div.auth-btn-wrapper > button.btn.modal-btn.auth.authorize.button') as HTMLButtonElement
-  sendTokenBtn.click()
+    const inputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
+    inputValueSetter.call(tokenInput, token);
+
+    var event = new Event('input', { bubbles: true });
+    tokenInput.dispatchEvent(event);
+
+    const sendTokenBtn = document.querySelector('.auth-btn-wrapper > button[type="submit"]') as HTMLButtonElement
+    sendTokenBtn.click()
+  }
+  finally {
+    await wait(100)
+    const closeBtn = document.querySelector('.auth-btn-wrapper').lastChild as HTMLButtonElement
+
+    closeBtn.click()
+  }
 }
 
 chrome.runtime.onMessage.addListener((message: { action: ActionsOptions, payload?: any }, _, sendResponse) => {
