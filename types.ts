@@ -17,7 +17,6 @@ export enum ActionsOptions {
   SIGN_IN = "signIn"
 }
 
-
 export type Profile = {
   id: string,
   authRoute: string
@@ -30,4 +29,11 @@ export type ExtensionStore = Record<string, { profiles: Profile[] }>
 
 export type AuthResponseDto = {
   access_token: string,
+}
+
+export type AuthErrorResponseDto = {
+  Code: number,
+  Complement: string,
+  Error: string,
+  Message: string
 }

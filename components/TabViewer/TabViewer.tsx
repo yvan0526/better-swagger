@@ -1,15 +1,17 @@
-import { Button, Card, Divider, Group, PasswordInput, Space, Stack, Text, TextInput } from "@mantine/core"
+import { Box, Button, Card, Divider, Group, PasswordInput, Space, Stack, Text, TextInput } from "@mantine/core"
 import { useForm } from "react-hook-form"
 import { useState } from "react"
+import { useStyles } from "~styles/global.styles"
 
 import _ from 'lodash'
-import { ActionsOptions, AuthResponseDto, ExtensionStore, Profile, TabsOptions } from "~types"
+import { ActionsOptions, AuthResponseDto, AuthErrorResponseDto, ExtensionStore, Profile, TabsOptions } from "~types"
 
 import type { TabViewerProps } from "./TabViewer.types"
-import axios from "axios"
-import { useSetState } from "@mantine/hooks"
+import axios, { AxiosError } from "axios"
 
 const TabViewer = ({ currentTab, browserTab }: TabViewerProps) => {
+  const { classes } = useStyles()
+
   const form = useForm<Profile>({
     defaultValues: {
       id: _.uniqueId()
@@ -71,8 +73,12 @@ const TabViewer = ({ currentTab, browserTab }: TabViewerProps) => {
       .then((success) => {
         response = success
       })
-      .catch((error) => {
-        alert(`Error while connecting as ${profile.name} : ${error}`)
+      .catch((error: AxiosError) => {
+        const dataError = error.response.data as AuthErrorResponseDto
+
+        alert(`Error while connecting as ${profile.name} : ${error}\n\n` +
+              `Error: ${dataError.Error}\n` +
+              `Message: ${dataError.Message}`)
       })
 
     if (response === undefined) {
@@ -137,9 +143,8 @@ const TabViewer = ({ currentTab, browserTab }: TabViewerProps) => {
       return (
         <div data-testid="authContainer">
           <Stack>
-            <Divider />
-            <TextInput label="Auth route" placeholder="https://my-domain.com/api/auth" {...form.register('authRoute', { required: true })} />
             <TextInput label="Nom" placeholder="Customer Profile" {...form.register("name", { required: true })} />
+            <TextInput label="Auth route" placeholder="https://my-domain.com/api/auth" {...form.register('authRoute', { required: true })} />
             <TextInput label="Email" placeholder="root@root.com" {...form.register("email", { required: true })} />
             <PasswordInput label="Password" placeholder="********" {...form.register("password", { required: true })} />
             <Space />
@@ -163,14 +168,13 @@ const TabViewer = ({ currentTab, browserTab }: TabViewerProps) => {
             {
               domain.profiles.map((profile) => {
                 return (
-                  <Card key={profile.id} shadow="sm" p="lg" radius="lg">
+                  <Card key={profile.id} shadow="sm" p="sm" radius="lg">
                     <Group position="apart">
-                      <Text size="sm" color="green">{profile.name}</Text>
-                      <Button onClick={() => onProfileUse(profile)}>
-                        USE
+                      <Button className={classes.profileButton} w="65%" onClick={() => onProfileUse(profile)}>
+                        {profile.name}
                       </Button>
-                      <Button onClick={() => onProfileDeletion(profile)}>
-                        DELETE
+                      <Button className={classes.profileButton} w="20%" onClick={() => onProfileDeletion(profile)} color="red">
+                        X
                       </Button>
                     </Group>
                   </Card>
@@ -186,6 +190,7 @@ const TabViewer = ({ currentTab, browserTab }: TabViewerProps) => {
       return (
         <div>
           <h1>About</h1>
+          <p>Swaggeright was made by Adil Basri and Yvan Giordano.</p>
         </div>
       )
   }

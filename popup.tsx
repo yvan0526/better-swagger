@@ -18,7 +18,7 @@ import { NAVIGATION_TABS } from "~utils"
 
 function IndexPopup() {
   const [browserTab, setBrowserTab] = useState<chrome.tabs.Tab>()
-  const [currentTab, setTab] = useState<TabsOptions>(TabsOptions.TOOLS)
+  const [currentTab, setTab] = useState<TabsOptions>(TabsOptions.PROFILES)
   const [isTabSwagger, setTabSwagger] = useState(false)
   const { classes } = useStyles()
 
@@ -57,59 +57,44 @@ function IndexPopup() {
 
   return (
     <MantineProvider withGlobalStyles withNormalizeCSS>
-      {
-        !isTabSwagger && (
-          <Box className={classes.popupContainer}>
-            <Stack align="center">
-              <Title order={5} weight="600">
-                Swaggeright
-              </Title>
-              <Text size="sm">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius, cum
-                quidem quos necessitatibus voluptatum reiciendis minima.
-              </Text>
-              <Divider my="sm" />
-            </Stack>
+      <Box className={classes.popupContainer}>
+        <Stack align="center">
+          <Title order={3} weight="600">
+            Swaggeright
+          </Title>
+          <Divider my="sm" />
+        </Stack>
+        {
+          isTabSwagger && (
+            <Stack>
+              <div>
+                {NAVIGATION_TABS.map((tab) => (
+                  <Button
+                    className={classes.tab}
+                    key={tab.value}
+                    onClick={() => setTab(tab.value)}
+                    color="dark"
+                    variant={currentTab === tab.value ? "filled" : "default"}
+                    name={tab.value}>
+                    {tab.label}
+                  </Button>
+                ))}
+              </div>
 
+              <Divider />
+              <TabViewer currentTab={currentTab} browserTab={browserTab} />
+            </Stack>
+          )
+        }
+
+        {
+          !isTabSwagger && (
             <Text>
               This website is not made with Swagger UI.
             </Text>
-          </Box>
-        )
-      }
-
-      {
-        isTabSwagger && (
-          <Box className={classes.popupContainer}>
-            <Stack align="center">
-              <Title order={5} weight="600">
-                Swaggeright
-              </Title>
-              <Text size="sm">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius, cum
-                quidem quos necessitatibus voluptatum reiciendis minima.
-              </Text>
-              <Divider my="sm" />
-            </Stack>
-            <Group spacing="lg">
-              {NAVIGATION_TABS.map((tab) => (
-                <Button
-                  key={tab.value}
-                  onClick={() => setTab(tab.value)}
-                  color="dark"
-                  variant={currentTab === tab.value ? "filled" : "default"}
-                  name={tab.value}>
-                  {tab.label}
-                </Button>
-              ))}
-            </Group>
-
-            <Space h="lg" />
-            <TabViewer currentTab={currentTab} browserTab={browserTab} />
-          </Box>
-        )
-      }
-
+          )
+        }
+      </Box>
     </MantineProvider>
   )
 }
