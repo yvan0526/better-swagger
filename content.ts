@@ -13,6 +13,7 @@ const expandAll = () => {
     button.click()
   })
 }
+
 const compactAll = () => {
   const allButtons = document.querySelectorAll(
     ".expand-operation"
@@ -31,8 +32,6 @@ const checkSwagger = () => {
   return !!swaggerElement
 }
 
-
-
 const signIn = async (token: string) => {
   navigator.clipboard.writeText(token)
 
@@ -40,13 +39,13 @@ const signIn = async (token: string) => {
   authBtn.click()
 
   let tokenInput = document.querySelector('[aria-label="auth-bearer-value"]') as HTMLInputElement
-  
+
   if (!tokenInput) {
     const logoutBtn = document.querySelector("#swagger-ui > section > div.swagger-ui > div:nth-child(2) > div.scheme-container > section > div.auth-wrapper > div > div.modal-ux > div > div > div.modal-ux-content > div > form > div.auth-btn-wrapper > button:nth-child(1)") as HTMLButtonElement
     logoutBtn.click()
     tokenInput = document.querySelector('[aria-label="auth-bearer-value"]') as HTMLInputElement
   }
-  
+
   const inputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set
   inputValueSetter.call(tokenInput, token);
 

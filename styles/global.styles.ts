@@ -1,5 +1,4 @@
 import { createStyles } from "@mantine/core"
-import { profile } from "console"
 
 export const useStyles = createStyles((theme) => ({
   popupContainer: {

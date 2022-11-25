@@ -2,9 +2,7 @@ import {
   Box,
   Button,
   Divider,
-  Group,
   MantineProvider,
-  Space,
   Stack,
   Text,
   Title

@@ -1,4 +1,4 @@
-import { Box, Button, Card, Divider, Group, PasswordInput, Space, Stack, Text, TextInput } from "@mantine/core"
+import { Button, Card, Group, PasswordInput, Space, Stack, TextInput } from "@mantine/core"
 import { useForm } from "react-hook-form"
 import { useState } from "react"
 import { useStyles } from "~styles/global.styles"
@@ -34,6 +34,7 @@ const TabViewer = ({ currentTab, browserTab }: TabViewerProps) => {
         }
       }
     }
+
     localStorage.setItem("store", JSON.stringify(newStore))
 
     form.reset({
@@ -76,9 +77,11 @@ const TabViewer = ({ currentTab, browserTab }: TabViewerProps) => {
       .catch((error: AxiosError) => {
         const dataError = error.response.data as AuthErrorResponseDto
 
-        alert(`Error while connecting as ${profile.name} : ${error}\n\n` +
-              `Error: ${dataError.Error}\n` +
-              `Message: ${dataError.Message}`)
+        alert(
+          `Error while connecting as ${profile.name} : ${error}\n\n` +
+          `Error: ${dataError.Error}\n` +
+          `Message: ${dataError.Message}`
+        )
       })
 
     if (response === undefined) {
