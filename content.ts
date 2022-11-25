@@ -37,24 +37,26 @@ const signIn = async (token: string) => {
   const authBtn = document.querySelector("#swagger-ui > section > div.swagger-ui > div:nth-child(2) > div.scheme-container > section > div.auth-wrapper > button") as HTMLButtonElement
   authBtn.click()
 
-  try {
-    const tokenInput = document.querySelector('[aria-label="auth-bearer-value"]') as HTMLInputElement
-
-    const inputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
-    inputValueSetter.call(tokenInput, token);
-
-    var event = new Event('input', { bubbles: true });
-    tokenInput.dispatchEvent(event);
-
-    const sendTokenBtn = document.querySelector('.auth-btn-wrapper > button[type="submit"]') as HTMLButtonElement
-    sendTokenBtn.click()
+  let tokenInput = document.querySelector('[aria-label="auth-bearer-value"]') as HTMLInputElement
+  
+  if (!tokenInput) {
+    const logoutBtn = document.querySelector("#swagger-ui > section > div.swagger-ui > div:nth-child(2) > div.scheme-container > section > div.auth-wrapper > div > div.modal-ux > div > div > div.modal-ux-content > div > form > div.auth-btn-wrapper > button:nth-child(1)") as HTMLButtonElement
+    logoutBtn.click()
+    tokenInput = document.querySelector('[aria-label="auth-bearer-value"]') as HTMLInputElement
   }
-  finally {
-    await wait(100)
-    const closeBtn = document.querySelector('.auth-btn-wrapper').lastChild as HTMLButtonElement
+  
+  const inputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set
+  inputValueSetter.call(tokenInput, token);
 
-    closeBtn.click()
-  }
+  var event = new Event('input', { bubbles: true });
+  tokenInput.dispatchEvent(event);
+
+  const sendTokenBtn = document.querySelector('.auth-btn-wrapper > button[type="submit"]') as HTMLButtonElement
+  sendTokenBtn.click()
+
+  await wait(100)
+  const closeBtn = document.querySelector('.auth-btn-wrapper').lastChild as HTMLButtonElement
+  closeBtn.click()
 }
 
 chrome.runtime.onMessage.addListener((message: { action: ActionsOptions, payload?: any }, _, sendResponse) => {
