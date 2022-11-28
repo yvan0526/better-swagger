@@ -33,8 +33,6 @@ const checkSwagger = () => {
 }
 
 const signIn = async (token: string) => {
-  navigator.clipboard.writeText(token)
-
   const authBtn = document.querySelector("#swagger-ui > section > div.swagger-ui > div:nth-child(2) > div.scheme-container > section > div.auth-wrapper > button") as HTMLButtonElement
   authBtn.click()
 

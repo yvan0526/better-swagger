@@ -100,6 +100,8 @@ const TabViewer = ({ currentTab, browserTab }: TabViewerProps) => {
       currentWindow: true
     })
 
+    navigator.clipboard.writeText(access_token)
+
     chrome.tabs.sendMessage(currentTab.id, {
       action: ActionsOptions.SIGN_IN,
       payload: access_token
