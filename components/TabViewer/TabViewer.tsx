@@ -168,7 +168,7 @@ const TabViewer = ({ currentTab, browserTab }: TabViewerProps) => {
       }
 
       return (
-        <div data-testid="authContainer">
+        <div data-testid="profilesContainer">
           <Stack>
             {
               domain.profiles.map((profile) => {

@@ -23,30 +23,36 @@ function IndexPopup() {
   // React hook => Fonction intégrée à React qui exécute un bloc d'instructions logique une fois
   useEffect(() => {
     const startExtension = async () => {
-      const [currentBrowserTab] = await chrome.tabs.query({ active: true, currentWindow: true })
-      setBrowserTab(currentBrowserTab)
+      try {
 
-      let message = {
-        action: ActionsOptions.CHECK_SWAGGER
-      }
-      const isBrowserTabSwagger = await chrome.tabs.sendMessage(currentBrowserTab.id, message) as boolean
-      setTabSwagger(isBrowserTabSwagger)
+        const [currentBrowserTab] = await chrome.tabs.query({ active: true, currentWindow: true })
+        setBrowserTab(currentBrowserTab)
 
-      const store = JSON.parse(localStorage.getItem("store")) as ExtensionStore ?? {}
-      const domainUrl = currentBrowserTab.url.replace("/index.html", '')
-
-      if (!!store[domainUrl]) {
-        store[domainUrl] = {
-          profiles: [...store[domainUrl].profiles]
+        let message = {
+          action: ActionsOptions.CHECK_SWAGGER
         }
-      } else {
-        store[domainUrl] = {
-          profiles: []
+        const isBrowserTabSwagger = await chrome.tabs.sendMessage(currentBrowserTab.id, message) as boolean
+        setTabSwagger(isBrowserTabSwagger)
+
+        const store = JSON.parse(localStorage.getItem("store")) as ExtensionStore ?? {}
+        const domainUrl = currentBrowserTab.url.replace("/index.html", '')
+
+        if (!!store[domainUrl]) {
+          store[domainUrl] = {
+            profiles: [...store[domainUrl].profiles]
+          }
+        } else {
+          store[domainUrl] = {
+            profiles: []
+          }
+        }
+
+        if (isBrowserTabSwagger) {
+          localStorage.setItem("store", JSON.stringify(store ?? []))
         }
       }
-
-      if (isBrowserTabSwagger) {
-        localStorage.setItem("store", JSON.stringify(store ?? []))
+      catch (error) {
+        console.log('Catch error in startExtension(): ' + error)
       }
     }
 
