@@ -24,7 +24,6 @@ function IndexPopup() {
   useEffect(() => {
     const startExtension = async () => {
       try {
-
         const [currentBrowserTab] = await chrome.tabs.query({ active: true, currentWindow: true })
         setBrowserTab(currentBrowserTab)
 
@@ -52,7 +51,8 @@ function IndexPopup() {
         }
       }
       catch (error) {
-        console.log('Catch error in startExtension(): ' + error)
+        const _error : Error = error
+        console.log(_error.name + ' in startExtension(): \n\t' + _error.message)
       }
     }
 
