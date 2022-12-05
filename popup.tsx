@@ -51,8 +51,8 @@ function IndexPopup() {
         }
       }
       catch (error) {
-        const _error : Error = error
-        console.log(_error.name + ' in startExtension(): \n\t' + _error.message)
+        const _error: Error = error
+        console.log(_error.name + ' in startExtension() in popup.tsx: \n\t' + _error.message)
       }
     }
 
